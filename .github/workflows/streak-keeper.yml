@@ -3,6 +3,13 @@ name: Keep my Duolingo streak
 on:
   schedule:
     - cron: '0 9,22 * * *'
+  workflow_dispatch:
+    inputs:
+      lessons:
+        default: 1
+        description: 'Number of lessons to be completed'
+        required: false
+        type: number
 
 jobs:
   study:
@@ -13,7 +20,7 @@ jobs:
       - run: bun index.js
         env:
           DUOLINGO_JWT: ${{ secrets.DUOLINGO_JWT }}
-          LESSONS: 1
+          LESSONS: ${{ inputs.lessons || 1 }}
   delete-old-runs:
     runs-on: ubuntu-latest
     permissions:
@@ -25,5 +32,5 @@ jobs:
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
-          keep_minimum_runs: 0
-          retain_days: 0
+          keep_minimum_runs: 20
+          retain_days: 30
