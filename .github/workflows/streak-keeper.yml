@@ -2,7 +2,14 @@ name: Keep my Duolingo streak
 
 on:
   schedule:
-    - cron: '0 9,22 * * *'
+    # Minute 17 avoids GitHub's top-of-hour queue, which delayed the
+    # 22:00 UTC run on 2026-10-11 until 01:04 UTC the next day.
+    # 04,09,14,19 UTC is every 5 hours. 19:17 UTC is 16:17 in
+    # America/Fortaleza (UTC-3): about 4h43m before 00:00 UTC and
+    # 7h43m before local midnight (03:00 UTC), so a multi-hour delay
+    # still lands before both.
+    - cron: '17 4,9,14,19 * * *'
+  workflow_dispatch:
 
 jobs:
   study:
